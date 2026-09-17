@@ -1,92 +1,203 @@
-<title>Book Availability</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Availability</title>
+    <style>
+        * { box-sizing: border-box; }
+        :root {
+            --blue: #1f3c88;
+            --ink: #222;
+            --muted: #667085;
+            --line: #ddd;
+            --background: #f4f4f4;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            color: var(--ink);
+        }
+        header {
+            padding: 25px 20px;
+            background: var(--blue);
+            color: white;
+            text-align: center;
+        }
+        header h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); }
+        header p { margin: 8px 0 0; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .section {
+            padding: 25px;
+            margin-bottom: 25px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+        }
+        .section h2 { margin: 0 0 18px; }
+        .controls { display: flex; gap: 12px; margin-bottom: 20px; }
+        .controls input, .controls select {
+            min-height: 42px;
+            padding: 0 12px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font: inherit;
+        }
+        .controls input { flex: 1; }
+        .controls select { background: white; }
+        .books { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .book { padding: 20px; border: 1px solid var(--line); border-radius: 8px; text-align: center; }
+        .book[hidden] { display: none; }
+        .book h3 { margin: 0 0 12px; }
+        .book-button {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+        }
+        .book-button:focus-visible { outline: 3px solid #6ea8fe; outline-offset: 5px; }
+        .book-button:hover h3 { color: var(--blue); }
+        .status { font-weight: bold; }
+        .borrowed { color: #c0392b; }
+        .available { color: #27ae60; }
+        .returned { color: #2980b9; }
+        .history { border-top: 1px solid var(--line); padding-top: 15px; }
+        .history p { margin: 6px 0; }
+        #emptyMessage { color: var(--muted); }
+        #availabilityView[hidden] { display: none; }
+        .back-button {
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 6px;
+            background: var(--blue);
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+        .back-button:hover { background: #162d68; }
+        @media (max-width: 700px) {
+            .container { margin: 20px auto; padding: 0 14px; }
+            .section { padding: 18px; }
+            .controls { flex-direction: column; }
+            .books { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Book Availability Checker</h1>
+        <p>Smart Library System</p>
+    </header>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <main class="container">
+        <section id="listView" class="section" aria-labelledby="status-heading">
+            <h2 id="status-heading">Book Status</h2>
+            <div class="controls">
+                <input id="search" type="search" placeholder="Search by title..." aria-label="Search books">
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="all">All statuses</option>
+                    <option value="available">Available</option>
+                    <option value="borrowed">Borrowed</option>
+                    <option value="returned">Returned</option>
+                </select>
+            </div>
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        color: #222;
-    }
+            <div class="books">
+                <article class="book" data-title="History" data-status="borrowed">
+                    <button class="book-button" type="button" data-book="History" data-status="borrowed">
+                        <h3>History</h3>
+                        <p class="status borrowed">Borrowed</p>
+                    </button>
+                </article>
+                <article class="book" data-title="Science" data-status="available">
+                    <button class="book-button" type="button" data-book="Science" data-status="available">
+                        <h3>Science</h3>
+                        <p class="status available">Available</p>
+                    </button>
+                </article>
+                <article class="book" data-title="Religion" data-status="returned">
+                    <button class="book-button" type="button" data-book="Religion" data-status="returned">
+                        <h3>Religion</h3>
+                        <p class="status returned">Returned</p>
+                    </button>
+                </article>
+            </div>
+            <p id="emptyMessage" hidden>No books match your search.</p>
+        </section>
 
-    header {
-        background: #1f3c88;
-        color: white;
-        text-align: center;
-        padding: 25px;
-    }
+        <section id="availabilityView" class="section" aria-labelledby="availabilityHeading" hidden>
+            <button id="backButton" class="back-button" type="button">Back to subjects</button>
+            <h2 id="availabilityHeading">Availability</h2>
+            <p id="availabilityStatus" class="status"></p>
+            <p id="availabilityMessage"></p>
+        </section>
 
-    header h1 {
-        margin: 0;
-        font-size: 28px;
-    }
+        <section class="section history" aria-labelledby="history-heading">
+            <h2 id="history-heading">Recent Activity</h2>
+            <p>Religion was returned today.</p>
+            <p>History was borrowed yesterday.</p>
+        </section>
+    </main>
 
-    header p {
-        margin: 8px 0 0;
-    }
+    <script>
+        const search = document.querySelector('#search');
+        const filter = document.querySelector('#statusFilter');
+        const books = [...document.querySelectorAll('.book')];
+        const bookButtons = [...document.querySelectorAll('.book-button')];
+        const emptyMessage = document.querySelector('#emptyMessage');
+        const listView = document.querySelector('#listView');
+        const availabilityView = document.querySelector('#availabilityView');
+        const availabilityHeading = document.querySelector('#availabilityHeading');
+        const availabilityStatus = document.querySelector('#availabilityStatus');
+        const availabilityMessage = document.querySelector('#availabilityMessage');
+        const backButton = document.querySelector('#backButton');
 
-    .container {
-        max-width: 1000px;
-        margin: 30px auto;
-        padding: 0 20px;
-    }
+        const messages = {
+            available: 'This book is available to borrow.',
+            borrowed: 'This book is currently borrowed.',
+            returned: 'This book was returned and is ready for checking.'
+        };
 
-    .section {
-        background: white;
-        padding: 25px;
-        margin-bottom: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
+        function showAvailability(bookButton) {
+            const book = bookButton.dataset.book;
+            const status = bookButton.dataset.status;
+            availabilityHeading.textContent = `${book} Availability`;
+            availabilityStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            availabilityStatus.className = `status ${status}`;
+            availabilityMessage.textContent = messages[status];
+            listView.hidden = true;
+            availabilityView.hidden = false;
+            backButton.focus();
+        }
 
-    .section h2 {
-        margin-top: 0;
-    }
+        function showBookList() {
+            availabilityView.hidden = true;
+            listView.hidden = false;
+        }
 
-    .books {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
+        function updateBooks() {
+            const text = search.value.trim().toLowerCase();
+            let visible = 0;
 
-    .book {
-        flex: 1;
-        min-width: 200px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
-    }
+            books.forEach((book) => {
+                const matchesText = book.dataset.title.toLowerCase().includes(text);
+                const matchesStatus = filter.value === 'all' || book.dataset.status === filter.value;
+                book.hidden = !(matchesText && matchesStatus);
+                if (!book.hidden) visible += 1;
+            });
 
-    .book h3 {
-        margin-top: 0;
-    }
+            emptyMessage.hidden = visible > 0;
+        }
 
-    .status {
-        font-weight: bold;
-    }
-
-    .borrowed {
-        color: #c0392b;
-    }
-
-    .available {
-        color: #27ae60;
-    }
-
-    .returned {
-        color: #2980b9;
-    }
-
-    .history {
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
-    }
-
-    .history p {
-        margin: 6px 0;
-    }
-</style>
+        search.addEventListener('input', updateBooks);
+        filter.addEventListener('change', updateBooks);
+        bookButtons.forEach((button) => button.addEventListener('click', () => showAvailability(button)));
+        backButton.addEventListener('click', showBookList);
+    </script>
+</body>
+</html>
