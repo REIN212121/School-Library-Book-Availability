@@ -1,141 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
+<title>Book Availability</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-    <title>Book Availability</title>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        color: #222;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    header {
+        background: #1f3c88;
+        color: white;
+        text-align: center;
+        padding: 25px;
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            color: #222;
-        }
+    header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
 
-        header {
-            background: #1f3c88;
-            color: white;
-            text-align: center;
-            padding: 25px;
-        }
+    header p {
+        margin: 8px 0 0;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
+    .container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
 
-        header p {
-            margin: 8px 0 0;
-        }
+    .section {
+        background: white;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
 
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+    .section h2 {
+        margin-top: 0;
+    }
 
-        .section {
-            background: white;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
+    .books {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
 
-        .section h2 {
-            margin-top: 0;
-        }
+    .book {
+        flex: 1;
+        min-width: 200px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+    }
 
-        .books {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+    .book h3 {
+        margin-top: 0;
+    }
 
-        .book {
-            flex: 1;
-            min-width: 200px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-        }
+    .status {
+        font-weight: bold;
+    }
 
-        .book h3 {
-            margin-top: 0;
-        }
+    .borrowed {
+        color: #c0392b;
+    }
 
-        .status {
-            font-weight: bold;
-        }
+    .available {
+        color: #27ae60;
+    }
 
-        .borrowed {
-            color: #c0392b;
-        }
+    .returned {
+        color: #2980b9;
+    }
 
-        .available {
-            color: #27ae60;
-        }
+    .history {
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+    }
 
-        .returned {
-            color: #2980b9;
-        }
-
-        .history {
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-        }
-
-        .history p {
-            margin: 6px 0;
-        }
-    </style>
-</head>
-
-<body>
-
-    <header>
-        <h1>BOOK AVAILABILITY CHECKER</h1>
-        <p>Smart Library System</p>
-    </header>
-
-    <div class="container">
-
-        <div class="section">
-
-            <h2>BOOK STATUS</h2>
-
-            <div class="books">
-
-                <div class="book">
-                    <div class="section">
-
-    <h2>BOOK STATUS</h2>
-
-    <div class="books">
-
-        <div class="book">
-            <h3>History</h3>
-            <p class="status borrowed">BORROWED</p>
-        </div>
-
-        <div class="book">
-            <h3>Science</h3>
-            <p class="status available">AVAILABLE</p>
-        </div>
-
-        <div class="book">
-            <h3>Religion</h3>
-            <p class="status returned">RETURNED</p>
-        </div>
-
-    </div>
-
-</div>
+    .history p {
+        margin: 6px 0;
+    }
+</style>
